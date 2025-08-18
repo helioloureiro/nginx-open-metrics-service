@@ -75,6 +75,24 @@ func main() {
 	 * 286479 286479 1417563
 	 * Reading: 0 Writing: 64 Waiting: 10
 	 */
-	http.Handle("/metrics", promhttp.Handler())
+	registry := prometheus.NewRegistry()
+	registry.MustRegister(
+		activeConnections,
+		serverAccepts,
+		serverHandled,
+		serverRequests,
+		connectionsReading,
+		connectionsWriting,
+		connectionsWaiting,
+	)
+
+	http.Handle(
+		"/metrics", promhttp.HandlerFor(
+			registry,
+			promhttp.HandlerOpts{
+				EnableOpenMetrics: true,
+			}),
+	)
+
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }
