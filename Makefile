@@ -41,8 +41,8 @@ container:
 
 tag:
 	NEWVERSION=$(shell expr $(DEBVERSION) + 1 ); \
-		sed -i "/^DEBVERSION/ s/:= .*/:= $$NEWVERSION/" Makefile
-	git commit -a -m "Uplifiting to version: $(RELEASE)-$(DEBVERSION)"
+		sed -i "/^DEBVERSION/ s/:= .*/:= $$NEWVERSION/" Makefile; \
+	git commit -a -m "Uplifiting to version: $(RELEASE)-$$NEWVERSION"
 	make git_tag
 
 git_tag:
