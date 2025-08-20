@@ -15,7 +15,7 @@ BUILD_OPTIONS += -buildmode=pie
 BUILD_OPTIONS += -tags netgo,osusergo
 BUILD_OPTIONS += -trimpath
 
-REGISTRY := registry.xensam.eu/images/$(PROJECT)
+REGISTRY := nononono
 
 all: $(BIN_LINUX)
 
@@ -43,8 +43,6 @@ tag:
 	NEWVERSION=$(shell expr $(DEBVERSION) + 1 ); \
 		sed -i "/^DEBVERSION/ s/:= .*/:= $$NEWVERSION/" Makefile
 	make git_tag
-	# generate proper version
-	make clean debian
 
 git_tag:
 	git commit -a -m "Uplifiting to version: $(RELEASE)-$(DEBVERSION)"
