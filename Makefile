@@ -46,6 +46,7 @@ tag:
 
 git_tag:
 	git commit -a -m "Uplifiting to version: $(RELEASE)-$(DEBVERSION)"
+	sleep 1 # to get the tag correctly
 	last_commit=$(shell git log --pretty=format:"%H" | head -1); \
 		git tag "$(RELEASE)-$(DEBVERSION)" $$last_commit
 
