@@ -1,6 +1,6 @@
 PROJECT := nginx-openmetrics
 RELEASE := 1.0
-DEBVERSION := 7
+DEBVERSION := 8
 ARCH := amd64
 
 BIN_LINUX := $(PROJECT)
