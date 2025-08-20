@@ -1,6 +1,6 @@
 PROJECT := nginx-openmetrics
 RELEASE := 1.0
-DEBVERSION := 1
+DEBVERSION := 3
 ARCH := amd64
 
 BIN_LINUX := $(PROJECT)
@@ -42,7 +42,6 @@ container:
 tag:
 	NEWVERSION=$(shell expr $(DEBVERSION) + 1 ); \
 		sed -i "/^DEBVERSION/ s/:= .*/:= $$NEWVERSION/" Makefile
-	make debian
 	make git_tag
 	# generate proper version
 	make clean debian
