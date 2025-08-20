@@ -43,21 +43,10 @@ Reading: 0 Writing: 1 Waiting: 0
 Start the service pointing to the same location you tested with curl:
 
 ```shell
-❯ ./nginx-openmetrics --service=http://localhost:8081/api
+❯ ./nginx-openmetrics --service=http://localhost:8080/api
 🚚 fetching data from: http://localhost:8081/api
 🎬 starting service at port: 9090
-🚚 fetching data from: http://localhost:8081/api
-status_code=200
-body: Active connections: 1 
-server accepts handled requests
- 220 220 516 
-Reading: 0 Writing: 1 Waiting: 0 
-
-lines: [Active connections: 1  server accepts handled requests  220 220 516  Reading: 0 Writing: 1 Waiting: 0  ]
-tmp: Active connections: 1 
 ```
-
-__Note:__ logging is a bit messy at this moment, but I will fix it next.
 
 ## testing
 

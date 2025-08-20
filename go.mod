@@ -5,6 +5,8 @@ go 1.24.5
 require (
 	github.com/prometheus/client_golang v1.23.0
 	github.com/prometheus/client_model v0.6.2
+	github.com/sirupsen/logrus v1.9.3
+	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
 )
 
 require (

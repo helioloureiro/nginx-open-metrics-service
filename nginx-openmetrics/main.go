@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -16,6 +15,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	dto "github.com/prometheus/client_model/go"
+	"github.com/sirupsen/logrus"
+	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
 var (
@@ -63,7 +64,10 @@ func main() {
 	service = flag.String("service", "http://localhost:8080/api", "the nginx api service, like http://localhost:8080/api")
 	port := flag.Int("port", 9090, "default port to listen the service")
 	printVersion := flag.Bool("version", false, "print the version and exit")
+	logLevel := flag.String("loglevel", "info", "the logging level (default=info)")
 	flag.Parse()
+
+	setUpLogging(*logLevel)
 
 	if *printVersion {
 		fmt.Println("nginx-open-metrics-service")
@@ -72,11 +76,11 @@ func main() {
 	}
 
 	if *service == "" {
-		log.Fatal("missing service service")
+		logrus.Fatal("missing service information to connecton on nginx")
 	}
 
-	fmt.Println("🚚 fetching data from:", *service)
-	fmt.Println("🎬 starting service at port:", *port)
+	logrus.Info("🚚 fetching data from:", *service)
+	logrus.Info("🎬 starting service at port:", *port)
 	/*
 	 * Active connections: 39
 	 * server accepts handled requests
@@ -105,7 +109,30 @@ func main() {
 	fetchDataFromNginx()
 
 	go dataUpdater()
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
+	logrus.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
+}
+
+func setUpLogging(logLevel string) {
+	logrus.SetFormatter(&easy.Formatter{
+		TimestampFormat: "2006-01-02T15:04:05",
+		LogFormat:       "[%time%] (%lvl%): %msg%\n",
+	})
+	switch logLevel {
+	case "panic":
+		logrus.SetLevel(logrus.PanicLevel)
+	case "fatal":
+		logrus.SetLevel(logrus.FatalLevel)
+	case "error":
+		logrus.SetLevel(logrus.ErrorLevel)
+	case "warn":
+		logrus.SetLevel(logrus.WarnLevel)
+	case "info":
+		logrus.SetLevel(logrus.InfoLevel)
+	case "debug":
+		logrus.SetLevel(logrus.InfoLevel)
+	default:
+		logrus.Panic("Invalid config.json. Log level must be 'panic' 'fatal' 'error' 'warn' 'info' or 'debug'")
+	}
 }
 
 func dataUpdater() {
@@ -115,24 +142,24 @@ func dataUpdater() {
 	for {
 		select {
 		case <-ticker.C:
-			fmt.Println("⌛ ticker after 15s")
+			logrus.Debug("⌛ ticker after 15s")
 			fetchDataFromNginx()
 		}
 	}
 }
 
 func fetchDataFromNginx() {
-	fmt.Println("🚚 fetching data from:", *service)
+	logrus.Debug("🚚 fetching data from:", *service)
 	resp, err := http.Get(*service)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("failed to fetch data from: %s", *service))
+		logrus.Fatal(fmt.Sprintf("failed to fetch data from: %s", *service))
 	}
-	fmt.Println(fmt.Sprintf("status_code=%d", resp.StatusCode))
+	logrus.Debug(fmt.Sprintf("status_code=%d", resp.StatusCode))
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("failed to fetch data from: %s", *service))
+		logrus.Fatal(fmt.Sprintf("failed to fetch data from: %s", *service))
 	}
-	fmt.Println(fmt.Sprintf("body: %s", body))
+	logrus.Debug(fmt.Sprintf("body: %s", body))
 	ac, sa, sh, sr, cr, cw, cwa := parseDataFromNginx(body)
 	activeConnections.Set(float64(ac))
 	serverAccepts.Add(getDiffValue(serverAccepts, sa))
@@ -146,10 +173,11 @@ func fetchDataFromNginx() {
 func parseDataFromNginx(body []byte) (int, int, int, int, int, int, int) {
 	bodyStr := string(body)
 	lines := strings.Split(bodyStr, "\n")
-	fmt.Println(fmt.Sprintf("lines: %v", lines))
+	logrus.Debug(fmt.Sprintf("lines: %v", lines))
+
 	var tmp string
 	tmp = lines[0]
-	fmt.Println(fmt.Sprintf("tmp: %v", tmp))
+	logrus.Debug(fmt.Sprintf("tmp: %v", tmp))
 	ac := convertToInt(strings.Split(tmp, ":")[1])
 
 	tmp = lines[2]
@@ -172,7 +200,7 @@ func convertToInt(value string) int {
 	value = sed(value, " ", "")
 	v, error := strconv.Atoi(value)
 	if error != nil {
-		log.Fatal(error)
+		logrus.Fatal(error)
 	}
 	return v
 }
