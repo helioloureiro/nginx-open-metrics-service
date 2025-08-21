@@ -44,7 +44,7 @@ Start the service pointing to the same location you tested with curl:
 
 ```shell
 ❯ ./nginx-openmetrics --service=http://localhost:8080/api
-🚚 fetching data from: http://localhost:8081/api
+🚚 fetching data from: http://localhost:8080/api
 🎬 starting service at port: 9090
 ```
 
@@ -57,27 +57,27 @@ server accepts handled requests
  221 221 521 
 Reading: 0 Writing: 1 Waiting: 1 
 ❯ curl localhost:9090/metrics
-# HELP active_connections The number of active connections
-# TYPE active_connections gauge
-active_connections 1
-# HELP reading_connections The number of active reading connections
-# TYPE reading_connections gauge
-reading_connections 0
-# HELP server_accepts_total The total number of server accepted connections
-# TYPE server_accepts_total counter
-server_accepts_total 221
-# HELP server_handled_total The total number of server handled connections
-# TYPE server_handled_total counter
-server_handled_total 221
-# HELP server_requests_total The total number of server requests
-# TYPE server_requests_total counter
-server_requests_total 521
-# HELP waiting_connections The number of waiting connections
-# TYPE waiting_connections gauge
-waiting_connections 0
-# HELP writing_connections The number of active writing connections
-# TYPE writing_connections gauge
-writing_connections 1
+# HELP nginx_active_connections The number of active connections
+# TYPE nginx_active_connections gauge
+nginx_active_connections 1
+# HELP nginx_reading_connections The number of active reading connections
+# TYPE nginx_reading_connections gauge
+nginx_reading_connections 0
+# HELP nginx_server_accepts_total The total number of server accepted connections
+# TYPE nginx_server_accepts_total counter
+nginx_server_accepts_total 221
+# HELP nginx_server_handled_total The total number of server handled connections
+# TYPE nginx_server_handled_total counter
+nginx_server_handled_total 221
+# HELP nginx_server_requests_total The total number of server requests
+# TYPE nginx_server_requests_total counter
+nginx_server_requests_total 521
+# HELP nginx_waiting_connections The number of waiting connections
+# TYPE nginx_waiting_connections gauge
+nginx_waiting_connections 0
+# HELP nginx_writing_connections The number of active writing connections
+# TYPE nginx_writing_connections gauge
+nginx_writing_connections 1
 ```
 
 __Note:__ numbers might divert a bit since it updates every 15s.

@@ -22,38 +22,38 @@ import (
 var (
 	Version = "development"
 
-	activeConnections = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "active_connections",
-		Help: "The number of active connections",
-	})
-
 	serverAccepts = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "server_accepts_total",
+		Name: "nginx_server_accepts_total",
 		Help: "The total number of server accepted connections",
 	})
 
 	serverHandled = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "server_handled_total",
+		Name: "nginx_server_handled_total",
 		Help: "The total number of server handled connections",
 	})
 
 	serverRequests = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "server_requests_total",
+		Name: "nginx_server_requests_total",
 		Help: "The total number of server requests",
 	})
 
+	activeConnections = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "nginx_active_connections",
+		Help: "The number of active connections",
+	})
+
 	connectionsReading = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "reading_connections",
+		Name: "nginx_reading_connections",
 		Help: "The number of active reading connections",
 	})
 
 	connectionsWriting = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "writing_connections",
+		Name: "nginx_writing_connections",
 		Help: "The number of active writing connections",
 	})
 
 	connectionsWaiting = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "waiting_connections",
+		Name: "nginx_waiting_connections",
 		Help: "The number of waiting connections",
 	})
 
