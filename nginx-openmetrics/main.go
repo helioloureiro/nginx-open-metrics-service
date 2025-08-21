@@ -117,6 +117,12 @@ func setUpLogging(logLevel string) {
 		TimestampFormat: "2006-01-02T15:04:05",
 		LogFormat:       "[%time%] (%lvl%): %msg%\n",
 	})
+
+	if logLevel == "info" {
+		// default value, so not changes needed
+		return
+	}
+
 	switch logLevel {
 	case "panic":
 		logrus.SetLevel(logrus.PanicLevel)
@@ -126,18 +132,19 @@ func setUpLogging(logLevel string) {
 		logrus.SetLevel(logrus.ErrorLevel)
 	case "warn":
 		logrus.SetLevel(logrus.WarnLevel)
-	case "info":
-		logrus.SetLevel(logrus.InfoLevel)
 	case "debug":
-		logrus.SetLevel(logrus.InfoLevel)
+		logrus.SetLevel(logrus.DebugLevel)
 	default:
 		logrus.Panic("Invalid config.json. Log level must be 'panic' 'fatal' 'error' 'warn' 'info' or 'debug'")
 	}
+
+	logrus.Warn(fmt.Sprintf("logging set to %s", logLevel))
 }
 
 func dataUpdater() {
 	// updated every 15s
 	ticker := time.NewTicker(15 * time.Second)
+	logrus.Debug("starting time ⌛ ticker - every 15s")
 	defer ticker.Stop()
 	for {
 		select {
