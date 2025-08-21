@@ -114,7 +114,7 @@ func main() {
 
 func setUpLogging(logLevel string) {
 	logrus.SetFormatter(&easy.Formatter{
-		TimestampFormat: "2006-01-02T15:04:05",
+		TimestampFormat: "2006-01-02T15:04:05.00000",
 		LogFormat:       "[%time%] (%lvl%): %msg%\n",
 	})
 
