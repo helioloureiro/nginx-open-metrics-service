@@ -19,6 +19,10 @@ import (
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
+const (
+	SERVICE_NAME = "nginx-open-metrics-service"
+)
+
 var (
 	Version = "development"
 
@@ -70,7 +74,7 @@ func main() {
 	setUpLogging(*logLevel)
 
 	if *printVersion {
-		fmt.Println("nginx-open-metrics-service")
+		fmt.Println(SERVICE_NAME)
 		fmt.Println("version:", Version)
 		os.Exit(0)
 	}
@@ -79,6 +83,7 @@ func main() {
 		logrus.Fatal("missing service information to connecton on nginx")
 	}
 
+	logrus.Info(fmt.Sprintf("%s (%s)", SERVICE_NAME, Version))
 	logrus.Info("🚚 fetching data from:", *service)
 	logrus.Info("🎬 starting service at port:", *port)
 	/*
