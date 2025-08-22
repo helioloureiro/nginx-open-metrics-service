@@ -1,0 +1,2 @@
+nginx-openmetrics /usr/sbin
+nginx-openmetrics.service /usr/lib/systemd/system
