@@ -31,3 +31,16 @@ go.work.sum
 # .idea/
 # .vscode/
 vendor/*
+
+# debian packages
+*.ddeb
+*.deb
+*.debian.tar.xz
+*.dsc
+*.build
+*.buildinfo
+*.changes
+*.orig.tar.xz
+ngix-openmetrics/nginx-openmetrics
+ngix-openmetrics-?.?/nginx-openmetrics
+ngix-openmetrics-?.?/nginx-openmetrics.service

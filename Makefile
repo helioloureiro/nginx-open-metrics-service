@@ -5,6 +5,8 @@ ARCH := amd64
 
 BIN_LINUX := $(PROJECT)
 SRC := $(PROJECT)/main.go
+DEBIAN_PKG := $(PROJECT)-$(RELEASE)
+SYSTEMD_SVC := $(PROJECT).service
 
 CONTACT := helio@loureiro.eng.br
 
@@ -17,6 +19,7 @@ BUILD_OPTIONS += -trimpath
 
 REGISTRY := nononono
 
+
 all: $(BIN_LINUX)
 
 init:
@@ -27,7 +30,7 @@ test: init $(SRC)
 	cd $(PROJECT)
 	go test -v ./...
 
-$(BIN_LINUX): init $(SRC) test
+$(PROJECT)/$(BIN_LINUX): init $(SRC) test
 	cd $(PROJECT)
 	env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o $(BIN_LINUX) $(BUILD_OPTIONS) ./...
 
@@ -38,6 +41,14 @@ container:
 	docker tag $$img_id $(REGISTRY):$$git_tag
 	#docker push $()
 
+
+debian: $(PROJECT)/$(BIN_LINUX)
+	install -m 755 $(PROJECT)/$(BIN_LINUX) $(DEBIAN_PKG)
+	install -m 0644 $(SYSTEMD_SVC) $(DEBIAN_PKG)
+	# generate the orig package
+	tar Jcvf $(PROJECT)_$(RELEASE).orig.tar.xz $(DEBIAN_PKG)/$(BIN_LINUX) $(DEBIAN_PKG)/$(SYSTEMD_SVC)
+	cd $(DEBIAN_PKG); \
+	debuild -us -uc
 
 tag:
 	NEWVERSION=$(shell expr $(DEBVERSION) + 1 ); \
@@ -56,3 +67,4 @@ push:
 clean:
 	rm -f $(PROJECT)/$(BIN_LINUX)
 	rm -f *deb *dsc *build *buildinfo *changes *xz
+	rm -f $(DEBIAN_PKG)/$(BIN_LINUX) $(DEBIAN_PKG)/$(SYSTEMD_SVC)
