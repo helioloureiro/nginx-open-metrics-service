@@ -81,3 +81,20 @@ nginx_writing_connections 1
 ```
 
 __Note:__ numbers might divert a bit since it updates every 15s.
+
+## Build
+
+Just have a Go compiler and make.
+
+```shell
+❯ make
+go mod tidy
+go mod vendor
+cd nginx-openmetrics
+go test -v ./...
+?       nginx-openmetrics/v/nginx-openmetrics   [no test files]
+cd nginx-openmetrics
+env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o nginx-openmetrics -modcacherw -ldflags="-w -X 'main.Version=$(git tag -l --sort taggerdate | tail -1)'" -buildmode=pie -tags netgo,osusergo -trimpath ./...
+```
+
+Binary will be available at `nginx-openmetrics/nginx-openmetrics`.
