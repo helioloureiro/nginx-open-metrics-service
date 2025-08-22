@@ -128,3 +128,15 @@ Then enable the service.
 ❯ sytemctl daemon-reload
 ❯ sytemctl enable --now nginx-openmetrics
 ```
+
+## debian package
+
+Now it is possible to generate a debian package to make easier to install.
+
+You need to have `debuild` in place, which is parte of the package `devscripts`.
+
+Then it is just matter to run:
+
+```shell
+❯ make debian
+```
