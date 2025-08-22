@@ -1,0 +1,15 @@
+[Unit]
+Description=nginx open metrics service
+Wants=network-online.target
+After=network-online.target nginx.service
+ConditionFileIsExecutable=/usr/sbin/nginx-openmetrics
+
+[Service]
+Restart=always
+User=www-data
+Group=www-data
+ExecStart=/usr/sbin/nginx-openmetrics --service=http://localhost:8080/api
+TimeoutStopSec=5s
+
+[Install]
+WantedBy=multi-user.target
