@@ -1,5 +1,5 @@
-nginx-openmetrics (1.0-9) UNRELEASED; urgency=low
+nginx-openmetrics (1.0-13) UNRELEASED; urgency=low
 
-  * Initial release.
+  * Improved build and project makefile.
 
- -- Helio Loureiro <helio@loureiro.eng.br>  Fri, 22 Aug 2025 17:09:59 +0200
+ -- Helio Loureiro <helio@dovahkiin>  Fri, 22 Aug 2025 18:29:13 +0200
