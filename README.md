@@ -98,3 +98,33 @@ env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o nginx-openmetrics -modcach
 ```
 
 Binary will be available at `nginx-openmetrics/nginx-openmetrics`.
+
+## systemd
+
+There is a template for systemd service.
+
+It is available on `nginx-openmetrics.service`.
+
+You can change the parameters to fit your settings:
+
+```systemd
+[Service]
+Restart=always
+User=www-data
+Group=www-data
+ExecStart=/usr/sbin/nginx-openmetrics --service=http://localhost:8080/api
+```
+
+User `www-data` and group `www-data` are the default for debian based systems
+(debian, ubuntu, mint, etc).
+
+Be sure you placed the binary into `/usr/sbin`.
+
+Move the `nginx-openmetrics.service` to `/etc/systemd/system` and reload systemd.
+Then enable the service.
+
+```shell
+❯ mv nginx-openmetrics.service /etc/systemd/system
+❯ sytemctl daemon-reload
+❯ sytemctl enable --now nginx-openmetrics
+```
